@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "set NODE_ENV=production & node build/index.js",
+    "start": "set NODE_ENV=production & node build/index.js --omit=dev",
     "dev": "ts-node-dev src/index.ts",
     "lint": "ts-standard",
     "lint:fix": "ts-standard --fix",
