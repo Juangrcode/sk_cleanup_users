@@ -12,22 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importDefault(require("mongoose"));
 const config_1 = __importDefault(require("../config"));
-const MONGO_URI = `mongodb+srv://${config_1.default.dbUser}:${config_1.default.dbPassword}@${config_1.default.dbHost}/${config_1.default.dbName}?retryWrites=true&w=majority`;
-class MongooseLib {
-    constructor() { }
-    connect() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const options = {
-                useNewUrlParser: true,
-                useUnifiedTopology: true
-            };
-            yield mongoose_1.default
-                .connect(MONGO_URI, options)
-                .then(() => console.log(`[db] Connect success in mongodb+srv://${config_1.default.dbUser}:password@host/${config_1.default.dbName}`))
-                .catch((err) => console.error(`[db] ${err}`));
-        });
-    }
-}
-exports.default = MongooseLib;
+const moment_1 = __importDefault(require("moment"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const signToken = ({ id, name, apiKey }) => __awaiter(void 0, void 0, void 0, function* () {
+    const payload = {
+        sub: id,
+        name,
+        scopes: apiKey.scopes,
+        iat: (0, moment_1.default)().unix(),
+        exp: (0, moment_1.default)().add(60, 'days').unix()
+    };
+    // Create JWT with expires
+    const token = jsonwebtoken_1.default.sign(payload, config_1.default.authJwtSecret);
+    return { token, user: { id, name } };
+});
+exports.default = { signToken };

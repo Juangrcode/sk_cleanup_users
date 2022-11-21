@@ -12,22 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importDefault(require("mongoose"));
-const config_1 = __importDefault(require("../config"));
-const MONGO_URI = `mongodb+srv://${config_1.default.dbUser}:${config_1.default.dbPassword}@${config_1.default.dbHost}/${config_1.default.dbName}?retryWrites=true&w=majority`;
-class MongooseLib {
-    constructor() { }
-    connect() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const options = {
-                useNewUrlParser: true,
-                useUnifiedTopology: true
-            };
-            yield mongoose_1.default
-                .connect(MONGO_URI, options)
-                .then(() => console.log(`[db] Connect success in mongodb+srv://${config_1.default.dbUser}:password@host/${config_1.default.dbName}`))
-                .catch((err) => console.error(`[db] ${err}`));
-        });
-    }
-}
-exports.default = MongooseLib;
+const apiKey_model_1 = __importDefault(require("../models/apiKey.model"));
+// Get permisss of token public
+const getApiKey = ({ token }) => __awaiter(void 0, void 0, void 0, function* () {
+    const [apiKey] = yield apiKey_model_1.default.find({ token });
+    return apiKey;
+});
+exports.default = {
+    getApiKey
+};
